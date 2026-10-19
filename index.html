@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#0c0d12">
+<title>Aura Wallpapers</title>
+<style>
+:root{color-scheme:dark;--bg:#0c0d12;--panel:#191a22;--muted:#9a9ba7;--lime:#c6f277;--text:#f6f5f1}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:15px system-ui,-apple-system,Segoe UI,sans-serif}
+header{display:flex;align-items:center;gap:12px;padding:20px 18px 8px}.logo{width:44px;height:44px;border-radius:14px;background:var(--lime);color:#171b11;display:grid;place-items:center;font-size:25px;font-weight:900}
+.brand{font-size:22px;font-weight:800;letter-spacing:-.8px}.sub{font-size:10px;color:var(--muted);letter-spacing:1.3px}
+main{padding:14px 16px 92px}.eyebrow{font-size:11px;color:var(--muted);letter-spacing:1.4px}.hero{font-size:35px;line-height:1.05;font-weight:850;letter-spacing:-1.2px;margin:8px 0}.hero span{color:var(--lime)}.intro{color:var(--muted);margin-bottom:20px}
+.search{display:flex;align-items:center;background:var(--panel);border-radius:15px;padding:0 14px;margin-bottom:22px}.search span{color:var(--muted);font-size:20px}.search input{width:100%;padding:15px 10px;border:0;outline:0;background:transparent;color:var(--text);font-size:15px}
+.section{display:flex;justify-content:space-between;align-items:center;margin:20px 0 13px}.section h2{font-size:18px;margin:0}.count{font-size:12px;color:var(--lime)}
+.chips{display:flex;gap:8px;overflow:auto;padding-bottom:4px}.chip{border:0;white-space:nowrap;background:#202129;color:#c0c0cb;padding:10px 15px;border-radius:30px;font-size:13px}.chip.active{background:var(--lime);color:#171b11;font-weight:700}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px 12px}.wall{background:#191a22;border-radius:17px;overflow:hidden;min-width:0}.wall img{display:block;width:100%;aspect-ratio:3/4;object-fit:cover;background:#222}.wall-info{display:flex;align-items:center;justify-content:space-between;padding:10px 10px 2px;gap:4px}.wall-name{font-weight:650;font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.heart{border:0;background:transparent;color:#f4f4f4;font-size:22px;padding:0 2px}.heart.saved{color:var(--lime)}.meta{padding:0 10px 11px;color:var(--muted);font-size:11px}.empty{text-align:center;padding:35px 12px;color:var(--muted);grid-column:1/-1}
+nav{position:fixed;bottom:0;left:0;right:0;display:flex;justify-content:space-around;background:#15161deF;border-top:1px solid #282933;padding:11px 8px calc(10px + env(safe-area-inset-bottom));backdrop-filter:blur(18px)}
+nav button{border:0;background:transparent;color:#92939f;font-size:11px;display:flex;align-items:center;flex-direction:column;gap:4px;padding:3px 14px}nav button strong{font-size:21px;font-weight:500}nav button.active{color:var(--lime)}
+.modal{position:fixed;inset:0;background:#050509ed;z-index:5;display:none;overflow:auto;padding:20px 18px calc(25px + env(safe-area-inset-bottom))}.modal.open{display:block}.modal-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:15px}.close{border:0;border-radius:50%;width:40px;height:40px;background:#252630;color:white;font-size:23px}.preview{width:100%;max-height:65vh;object-fit:contain;border-radius:18px;background:#202129}.modal h2{margin:14px 0 4px}.modal p{color:var(--muted);font-size:13px}.action{width:100%;border:0;border-radius:14px;padding:15px;font-size:15px;font-weight:750;margin-top:10px;background:var(--lime);color:#171b11}.secondary{background:#272832;color:white}
+</style>
+</head>
+<body>
+<header><div class="logo">◉</div><div><div class="brand">aura</div><div class="sub">WALLPAPERS FOR YOUR WORLD</div></div></header>
+<main>
+<div class="eyebrow">YOUR SCREEN, YOUR STYLE</div><div class="hero">A fresh look,<br><span>every day.</span></div><div class="intro">Find the background that feels like you.</div>
+<label class="search"><span>⌕</span><input id="search" placeholder="Search wallpapers..." autocomplete="off"></label>
+<div class="section"><h2>Explore collections</h2><span class="count" id="total">6 wallpapers</span></div>
+<div class="chips" id="chips"></div>
+<div class="section"><h2 id="heading">Made for your screen</h2><span class="count" id="resultCount"></span></div>
+<div class="grid" id="grid"></div>
+</main>
+<nav><button id="exploreTab" class="active" onclick="setTab('Explore')"><strong>⌂</strong>Explore</button><button id="favTab" onclick="setTab('Favorites')"><strong>♡</strong>Favorites</button><button onclick="setTab('Collections')"><strong>▦</strong>Collections</button></nav>
+<div class="modal" id="modal"><div class="modal-top"><div class="brand">Wallpaper preview</div><button class="close" onclick="closePreview()">×</button></div><img class="preview" id="previewImage" alt="Selected wallpaper"><h2 id="previewName"></h2><p id="previewMeta"></p><button class="action" id="setBtn" onclick="setWallpaper()">Set as wallpaper</button><button class="action secondary" id="saveBtn" onclick="togglePreviewFavorite()">♡ Save to favorites</button><p>Setting the wallpaper requires an internet connection.</p></div>
+<script>
+const photos=[
+{id:1,name:"Golden Horizon",cat:"Nature",desc:"Sunset · HD",url:"https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=900&q=85"},
+{id:2,name:"Liquid Dreams",cat:"Abstract",desc:"Abstract · HD",url:"https://images.unsplash.com/photo-1550684848-fac1c5b4e853?auto=format&fit=crop&w=900&q=85"},
+{id:3,name:"Quiet Peaks",cat:"Nature",desc:"Mountains · HD",url:"https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=85"},
+{id:4,name:"Cosmic Bloom",cat:"Space",desc:"Galaxy · HD",url:"https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=900&q=85"},
+{id:5,name:"Neon Nights",cat:"Dark",desc:"Dark aesthetic · HD",url:"https://images.unsplash.com/photo-1519608487953-e999c86e7455?auto=format&fit=crop&w=900&q=85"},
+{id:6,name:"Soft Forms",cat:"Abstract",desc:"Minimal · HD",url:"https://images.unsplash.com/photo-1550859492-d5da9d8e45f3?auto=format&fit=crop&w=900&q=85"}
+];
+let category="All",tab="Explore",favorites=JSON.parse(localStorage.getItem("auraFavorites")||"[]"),selected=null;
+const cats=["All","Nature","Abstract","Space","Dark"];
+function initChips(){document.getElementById("chips").innerHTML=cats.map(c=>`<button class="chip ${c===category?'active':''}" onclick="setCategory('${c}')">${c}</button>`).join("")}
+function setCategory(c){category=c;tab="Explore";initChips();render()}
+function setTab(t){tab=t;document.getElementById("exploreTab").classList.toggle("active",t==="Explore");document.getElementById("favTab").classList.toggle("active",t==="Favorites");if(t==="Collections"){category="All";tab="Explore";document.getElementById("heading").textContent="Explore collections";}render()}
+function render(){
+ const q=document.getElementById("search").value.toLowerCase();
+ const list=photos.filter(p=>(tab!=="Favorites"||favorites.includes(p.id))&&(category==="All"||p.cat===category)&&(p.name+" "+p.cat+" "+p.desc).toLowerCase().includes(q));
+ document.getElementById("heading").textContent=tab==="Favorites"?"Your favorites":category==="All"?"Made for your screen":category+" wallpapers";
+ document.getElementById("resultCount").textContent=list.length+" results";
+ document.getElementById("total").textContent=photos.length+" wallpapers";
+ document.getElementById("grid").innerHTML=list.length?list.map(p=>`<article class="wall"><img src="${p.url}" alt="${p.name}" loading="lazy" onclick="openPreview(${p.id})"><div class="wall-info"><span class="wall-name">${p.name}</span><button class="heart ${favorites.includes(p.id)?'saved':''}" aria-label="Toggle favorite" onclick="toggleFavorite(${p.id})">${favorites.includes(p.id)?"♥":"♡"}</button></div><div class="meta">${p.cat} · ${p.desc}</div></article>`).join(""):`<div class="empty">${tab==="Favorites"?"No favorites yet. Tap a heart to save a wallpaper.":"No wallpapers found. Try another search."}</div>`;
+}
+function toggleFavorite(id){favorites=favorites.includes(id)?favorites.filter(x=>x!==id):[...favorites,id];localStorage.setItem("auraFavorites",JSON.stringify(favorites));render();if(selected===id)updateSaveButton()}
+function openPreview(id){selected=photos.find(p=>p.id===id);document.getElementById("previewImage").src=selected.url;document.getElementById("previewName").textContent=selected.name;document.getElementById("previewMeta").textContent=selected.cat+" · "+selected.desc;document.getElementById("modal").classList.add("open");updateSaveButton()}
+function closePreview(){document.getElementById("modal").classList.remove("open")}
+function updateSaveButton(){document.getElementById("saveBtn").textContent=favorites.includes(selected.id)?"♥ Saved to favorites":"♡ Save to favorites"}
+function togglePreviewFavorite(){toggleFavorite(selected.id)}
+function setWallpaper(){if(!selected)return;if(window.AuraAndroid&&window.AuraAndroid.setWallpaper){window.AuraAndroid.setWallpaper(selected.url)}else{alert("Open this app on Android to set the wallpaper.")}}
+document.getElementById("search").addEventListener("input",render);
+initChips();render();
+</script>
+</body>
+</html>
