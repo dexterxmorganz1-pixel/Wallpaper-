@@ -1,6 +1,7 @@
+
 name: Build Android APK
 
-on:
+'on':
   workflow_dispatch:
   push:
     branches:
@@ -12,7 +13,6 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - name: Check out source
         uses: actions/checkout@v4
